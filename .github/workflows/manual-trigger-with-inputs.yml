@@ -1,4 +1,4 @@
-name: Mixed inputs
+name: Manual input workflow
 
 on:
   workflow_dispatch:
@@ -11,14 +11,6 @@ on:
         - cschleiden
       message:
         required: true
-      use-emoji:
-        type: boolean
-        description: Include  emojis
-      environment:
-        type: environment
-      body:
-        type: string
-        required: true
 
 jobs:
   greet:
@@ -26,4 +18,4 @@ jobs:
 
     steps:
     - name: Send greeting
-      run: echo "${{ github.event.inputs.message }} ${{ fromJSON('["", ""]')[github.event.inputs.use-emoji == 'true'] }} ${{ github.event.inputs.name }}"
+      run: echo "${{ github.event.inputs.message }} ${{ github.event.inputs.name }}"
