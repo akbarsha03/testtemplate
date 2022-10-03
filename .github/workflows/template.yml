@@ -34,3 +34,8 @@ jobs:
           popd
           # Move generated content to root directory of repo
           # mv /tmp/$project_name/* .
+      - name: Force push new repo contents
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: "Updated cookiecutter changes"
+          push_options: --force
