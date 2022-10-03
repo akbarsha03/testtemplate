@@ -41,7 +41,9 @@ jobs:
           mv $PROJECT_NAME/* /home/runner/work/$REPO_NAME/$REPO_NAME/
           echo "cleaning up..."
           echo "removing template folder"
-          rm -rf {\{\ cookiecutter.project_name \}\}
+          rm -rf \{\{\ cookiecutter.project_name\ \}\}
+          echo "removing generated template folder"
+          rm -rf $PROJECT_NAME
           echo "removing template workflows"
           rm .github/workflows/template.yml
       - name: Commit generated template changes
