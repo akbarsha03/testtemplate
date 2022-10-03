@@ -28,9 +28,9 @@ jobs:
         run: |
           # Run cookiecutter
           pushd /tmp
-          cookiecutter gh:akbarsha03/testtemplate --no-input \
-            project_name=$(${{ github.event.inputs.project_name }}) \
-            email="$(${{ github.event.inputs.email }})"
+          cookiecutter . --no-input \
+            project_name="${{ github.event.inputs.project_name }}" \
+            email="${{ github.event.inputs.email }}"
           popd
           # Move generated content to root directory of repo
-          mv /tmp/$REPO_NAME/* .
+          mv /tmp/$REPO_NAME/* ~
