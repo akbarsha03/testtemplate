@@ -34,7 +34,3 @@ jobs:
           popd
           # Move generated content to root directory of repo
           mv /tmp/$REPO_NAME/* .
-          # And .gitignore too:
-          mv /tmp/$REPO_NAME/.gitignore .
-          # Delete the setup.yml workflow, it has served its purpose
-          rm .github/workflows/setup.yml
