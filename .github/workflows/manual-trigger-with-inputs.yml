@@ -3,19 +3,34 @@ name: Manual input workflow
 on:
   workflow_dispatch:
     inputs:
-      name:
-        type: choice
-        description: Who to greet
-        options: 
-        - monalisa
-        - cschleiden
-      message:
+      project_name:
+        description: Your project name
+        required: true
+      email:
+        description: Your email id
         required: true
 
 jobs:
   greet:
     runs-on: ubuntu-latest
-
+    env:
+      REPO_NAME: ${{ github.event.repository.name }}
+    - name: Install cookiecutter
+        run: pip3 install cookiecutter
+    - name: Rebuild contents using cookiecutter
+        run: |
+          # Run cookiecutter
+          pushd /tmp
+          cookiecutter gh:akbarsha03/testtemplate --no-input \
+            project_name=$(${{ github.event.inputs.project_name }}) \
+            email="$(${{ github.event.inputs.email }})"
+          popd
+          # Move generated content to root directory of repo
+          mv /tmp/$REPO_NAME/* .
+          # And .gitignore too:
+          mv /tmp/$REPO_NAME/.gitignore .
+          # Delete the setup.yml workflow, it has served its purpose
+          rm .github/workflows/setup.yml
     steps:
     - name: Send greeting
       run: echo "${{ github.event.inputs.message }} ${{ github.event.inputs.name }}"
