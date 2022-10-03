@@ -16,11 +16,17 @@ jobs:
     runs-on: ubuntu-latest
     env:
       REPO_NAME: ${{ github.event.repository.name }}
+      REPO_NAME_WITH_OWNER: ${{ github.repository }}
+      PROJECT_NAME: ${{ github.event.inputs.project_name }}
 
     steps:
       # Install Cookie cutter
       - name: Checkout repo
         uses: actions/checkout@v2
+      - name: Dump GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJSON(github) }}
+        run: echo "$GITHUB_CONTEXT"
       - name: Installing cookiecutter
         id: install_cookie_cutter
         run: pip3 install cookiecutter
@@ -28,13 +34,19 @@ jobs:
       - name: Running cookiecutter
         id: running_cookie_cutter
         run: |
-          cookiecutter . --no-input \
-            project_name="${{ github.event.inputs.project_name }}" \
+          cookiecutter gh:$REPO_NAME_WITH_OWNER --no-input \
+            project_name="$PROJECT_NAME" \
             email="${{ github.event.inputs.email }}"
-          mv $project_name/* .
-      - name: Commit changes
+          echo "Moving the generated template to root directory"
+          mv $PROJECT_NAME/* /home/runner/work/$REPO_NAME/$REPO_NAME/
+          echo "cleaning up..."
+          echo "removing template folder"
+          rm -rf {\{\ cookiecutter.project_name \}\}
+          echo "removing template workflows"
+          rm .github/workflows/template.yml
+      - name: Commit generated template changes
         uses: EndBug/add-and-commit@v9
         with:
             add: .
-            message: "template updated"
+            message: "Library initiated with template"
             default_author: github_actions
