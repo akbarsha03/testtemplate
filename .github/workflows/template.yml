@@ -31,6 +31,7 @@ jobs:
           cookiecutter . --no-input \
             project_name="${{ github.event.inputs.project_name }}" \
             email="${{ github.event.inputs.email }}"
+          mv $project_name/* .
       - name: Commit changes
         uses: EndBug/add-and-commit@v9
         with:
