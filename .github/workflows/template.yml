@@ -1,4 +1,4 @@
-name: Manual input workflow
+name: custom action workflow
 
 on:
   workflow_dispatch:
@@ -12,13 +12,19 @@ on:
 
 jobs:
   build:
+    # The type of runner that the job will run on, this job will run on ubuntu machine
     runs-on: ubuntu-latest
     env:
       REPO_NAME: ${{ github.event.repository.name }}
+
     steps:
-    - name: Install cookiecutter
+      # Install Cookie cutter
+      - name: Installing cookiecutter
+        id: install_cookie_cutter
         run: pip3 install cookiecutter
-    - name: Rebuild contents using cookiecutter
+      # Run cookie cutter
+      - name: Running cookiecutter
+        id: running_cookie_cutter
         run: |
           # Run cookiecutter
           pushd /tmp
@@ -32,5 +38,3 @@ jobs:
           mv /tmp/$REPO_NAME/.gitignore .
           # Delete the setup.yml workflow, it has served its purpose
           rm .github/workflows/setup.yml
-    - name: Send greeting
-      run: echo "${{ github.event.inputs.message }} ${{ github.event.inputs.name }}"
