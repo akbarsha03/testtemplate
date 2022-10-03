@@ -19,6 +19,8 @@ jobs:
 
     steps:
       # Install Cookie cutter
+      - name: Checkout repo
+        uses: actions/checkout@v2
       - name: Installing cookiecutter
         id: install_cookie_cutter
         run: pip3 install cookiecutter
@@ -26,23 +28,12 @@ jobs:
       - name: Running cookiecutter
         id: running_cookie_cutter
         run: |
-          # Run cookiecutter
-          pushd /tmp
-          cookiecutter gh:akbarsha03/testtemplate --no-input \
+          cookiecutter . --no-input \
             project_name="${{ github.event.inputs.project_name }}" \
             email="${{ github.event.inputs.email }}"
-          popd
-          # Move generated content to root directory of repo
-          # mv /tmp/$project_name/* .
-      - name: Force push new repo contents
-        uses: stefanzweifel/git-auto-commit-action@v4
+      - name: Commit changes
+        uses: EndBug/add-and-commit@v9
         with:
-          commit_message: "Updated cookiecutter changes"
-          push_options: --force
-      - name: "Run if changes have been detected"
-        if: steps.auto-commit-action.outputs.changes_detected == 'true'
-        run: echo "Changes!"
-
-      - name: "Run if no changes have been detected"
-        if: steps.auto-commit-action.outputs.changes_detected == 'false'
-        run: echo "No Changes!"
+            add: .
+            message: "template updated"
+            default_author: github_actions
