@@ -33,4 +33,4 @@ jobs:
             email="${{ github.event.inputs.email }}"
           popd
           # Move generated content to root directory of repo
-          mv /tmp/$REPO_NAME/* ~
+          #mv /tmp/$REPO_NAME/* ~
