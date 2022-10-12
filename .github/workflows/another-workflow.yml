@@ -1,4 +1,4 @@
-name: custom action workflow
+name: another custom action workflow
 
 on:
   workflow_dispatch:
