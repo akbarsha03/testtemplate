@@ -2,6 +2,8 @@ name: custom action workflow
 
 on:
   workflow_dispatch:
+    branches:
+        - temp
     inputs:
       project_name:
         description: Your project name
